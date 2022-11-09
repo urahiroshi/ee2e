@@ -793,23 +793,31 @@ if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
 }
 // end copy
 
-const getCoordinates = (selectorsA, selectorsB) => {
-  if (!Array.isArray(selectorsA)) {
-    selectorsA = [selectorsA];
+// accept these 3 inputs:
+// getCoordinates(/hoge/)
+// getCoordinates([/hoge/, 'select'])
+// getCoordinates([/hoge/, '#hoge', true])
+const getCoordinates = (params) => {
+  if (!Array.isArray(params)) {
+    params = [params];
   }
-  if (!selectorsB) {
-    selectorsB = selectorsA.concat('input');
+  let [selectorA, selectorB, isRawSelector] = params;
+  selectorA = [selectorA];
+  if (!selectorB) {
+    selectorB = selectorA.concat('input');
+  } else if (isRawSelector) {
+    selectorB = [selectorB];
+  } else {
+    selectorB = selectorA.concat(selectorB);
   }
-  if (!Array.isArray(selectorsB)) {
-    selectorsB = [selectorsB];
-  }
-  return [selectorsA, selectorsB].map((selector) => {
+  return [selectorA, selectorB].map((selector) => {
     const fqe = FQ.apply(null, selector);
     if (!fqe) {
       throw new Error('element is not found by: ' + selector);
     }
     const result = fqe.element.getBoundingClientRect();
     result.element = fqe.element;
+    result.selector = selector[0].toString();
     return result;
   });
 };
@@ -821,13 +829,14 @@ const toTrainingTable = (coordinatesOfValidPair) => {
   };
 
   const len = coordinatesOfValidPair.length;
-  const result = [];
+  const result = {};
   for (let i=0; i<len; i++) {
     for (let j=i; j<len; j++) {
       const a = coordinatesOfValidPair[i][0];
       const b = coordinatesOfValidPair[j][1];
       const validPair = (i === j) ? 1 : 0;
-      result.push(
+      const key = `${a.selector} ${j}`
+      result[key] = (
         [
           [a.left, b.left, a.right, b.right],
           [a.top, b.top, a.bottom, b.bottom],
@@ -836,12 +845,18 @@ const toTrainingTable = (coordinatesOfValidPair) => {
     }
   }
   console.log('=== original ===');
-  console.log(result.map(row => `- [${row}]`).join('\n'));
+  console.log(Object.keys(result).map(key => `- [${result[key]}] # ${key}`).join('\n'));
   console.log('=== clean up ===');
+  const outputKeys = [];
   const outputRows = [];
-  result.forEach((row) => {
-    if (outputRows.includes(row)) return;
-    outputRows.push(row);
+  Object.keys(result).forEach((key) => {
+    if (outputRows.includes(result[key])) return;
+    outputRows.push(result[key]);
+    outputKeys.push(key);
   });
-  console.log(outputRows.map(row => `- [${row}]`).join('\n'));
+  console.log(outputKeys.map(key => `- [${result[key]}] # ${key}`).join('\n'));
+  // this return object is for confirming pair elements
+  return coordinatesOfValidPair.map(
+    ([label, input]) => [label.element, input.element]
+  ).flat();
 };
