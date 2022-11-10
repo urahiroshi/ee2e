@@ -14,36 +14,41 @@ def separate_plus_and_minus(original):
 
 with open('./get-training-table/table.yaml') as file:
   table = yaml.safe_load(file)
-  training_inputs_good = np.array(
+  training_good = np.array(
     [separate_plus_and_minus(row[0]) for row in table]
-  ) / 1000.0
-  training_inputs_bad = np.array(
+  ) / 2000.0
+  training_bad = np.array(
     [separate_plus_and_minus(row[1]) for row in table]
-  ) / 1000.0
-  training_labels = np.array([[1.0, 0.0] for _ in table])
+  ) / 2000.0
+  training_good_bad = np.concatenate([training_good, training_bad])
+  training_bad_good = np.concatenate([training_bad, training_good])
+  training_labels = np.concatenate([
+    np.array([[1.0, 0.0] for _ in table]),
+    np.array([[0.0, 1.0] for _ in table]),
+  ])
 
-input_good = tf.keras.layers.Input(shape=(8))
-input_bad = tf.keras.layers.Input(shape=(8))
+input_good_bad = tf.keras.layers.Input(shape=(8))
+input_bad_good = tf.keras.layers.Input(shape=(8))
 shared_dence_1 = tf.keras.layers.Dense(4, activation=tf.nn.relu)
-shared_dence_2 = tf.keras.layers.Dense(3, activation=tf.nn.relu)
+# shared_dence_2 = tf.keras.layers.Dense(2, activation=tf.nn.relu)
 shared_dence_out = tf.keras.layers.Dense(1, activation=tf.nn.sigmoid)
 
-good_1 = shared_dence_1(input_good)
-bad_1 = shared_dence_1(input_bad)
-good_2 = shared_dence_2(good_1)
-bad_2 = shared_dence_2(bad_1)
-good_out = shared_dence_out(good_2)
-bad_out = shared_dence_out(bad_2)
+good_bad_1 = shared_dence_1(input_good_bad)
+bad_good_1 = shared_dence_1(input_bad_good)
+# good_bad_2 = shared_dence_2(good_bad_1)
+# bad_good_2 = shared_dence_2(bad_good_1)
+good_bad_out = shared_dence_out(good_bad_1)
+bad_good_out = shared_dence_out(bad_good_1)
 
-merged = tf.keras.layers.concatenate([good_out, bad_out], axis=-1)
-predictions = tf.keras.layers.Dense(2, activation=tf.nn.softmax)(merged)
+merged = tf.keras.layers.concatenate([good_bad_out, bad_good_out], axis=-1)
+predictions = tf.keras.layers.Dense(2, activation=tf.nn.softmax, use_bias=False)(merged)
 
-model = tf.keras.models.Model(inputs=[input_good, input_bad], outputs=predictions)
+model = tf.keras.models.Model(inputs=[input_good_bad, input_bad_good], outputs=predictions)
 
 model.compile(
-  optimizer='sgd',
+  optimizer=tf.keras.optimizers.Adam(learning_rate=0.01),
   loss='binary_crossentropy',
   metrics=['accuracy']
 )
 
-model.fit([training_inputs_good, training_inputs_bad], training_labels, epochs=5)
+model.fit([training_good_bad, training_bad_good], training_labels, epochs=300)
