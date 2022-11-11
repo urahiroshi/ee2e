@@ -80,14 +80,14 @@
 - [[0, -391, 0, -392], [0, -414, 0, -411]]
 - [[0, -410, 0, -410], [0, -434, 0, -432]]
 # added manually
-- [[110, 0, 101, 0], [110, 20, 101, 20]]
-- [[110, 0, 101, 0], [100, 40, 91, 40]] # choose little far element if fitting y-range
-- [[150, 0, 141, 0], [100, 40, 91, 40]] # still choose
-- [[550, 0, 541, 0], [50, 30, 41, 30]] # if it's too far, not choose
-- [[0, 32, 0, 31], [40, 32, 40, 31]] 
-- [[0, 32, 0, 31], [40, 27, 40, 26]] # choose little far element if fitting x-range
-- [[0, 62, 0, 61], [40, 27, 40, 26]] # don't choose too far element even if fitting x-range
-- [[110, 0, 101, 0], [-110, 0, -101, 0]] # don't prefer minus-x
-- [[610, 0, 601, 0], [-110, 0, -101, 0]] # even if it's too far, don't prefer minus-x
-- [[0, 32, 0, 31], [0, -31, 0, -30]] # don't prefer minux-y
-- [[0, -31, 0, -30], [0, 232, 0, 231]] # if it's too far, prefer minus-y
+# - [[110, 0, 101, 0], [110, 20, 101, 20]]
+# - [[110, 0, 101, 0], [100, 40, 91, 40]] # choose little far element if fitting y-range
+# - [[150, 0, 141, 0], [100, 40, 91, 40]] # still choose
+# - [[550, 0, 541, 0], [50, 30, 41, 30]] # if it's too far, not choose
+# - [[0, 32, 0, 31], [40, 32, 40, 31]] 
+# - [[0, 32, 0, 31], [40, 27, 40, 26]] # choose little far element if fitting x-range
+# - [[0, 62, 0, 61], [40, 27, 40, 26]] # don't choose too far element even if fitting x-range
+# - [[110, 0, 101, 0], [-110, 0, -101, 0]] # don't prefer minus-x
+# - [[610, 0, 601, 0], [-110, 0, -101, 0]] # even if it's too far, don't prefer minus-x
+# - [[0, 32, 0, 31], [0, -31, 0, -30]] # don't prefer minux-y
+# - [[0, -31, 0, -30], [0, 232, 0, 231]] # if it's too far, prefer minus-y
