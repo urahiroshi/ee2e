@@ -6,3 +6,11 @@ create_model:
 install:
 	pipenv run install
 
+tfjs_wizard:
+	pipenv run tensorflowjs_wizard
+
+convert:
+	pipenv run tensorflowjs_converter \
+		--input_format=keras_saved_model \
+		./saved_model/ \
+		./output/

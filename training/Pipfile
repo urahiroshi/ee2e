@@ -13,6 +13,8 @@ jax = "*"
 scipy = "*"
 jaxlib = "*"
 etils = "*"
+tensorflow-decision-forests = "*"
+pyinquirer = "*"
 
 [dev-packages]
 

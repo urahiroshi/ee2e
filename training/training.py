@@ -58,7 +58,7 @@ model.compile(
 
 model.fit([training_good_bad, training_bad_good], training_labels, epochs=300)
 
-tf.saved_model.save(model, './saved_model/')
+model.save('./saved_model/')
 
 test_good_bad, test_bad_good, test_labels = get_formatted_data(
   './get-test-table/test-table.yaml'
