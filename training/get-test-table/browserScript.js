@@ -822,39 +822,37 @@ const getCoordinates = (params) => {
   });
 };
 
-const toTrainingTable = (coordinatesOfValidPair) => {
-  const toRelative = (vals) => {
-    const min = Math.min.apply(null, vals);
-    return vals.map((val) => val - min);
-  };
-
+const toTable = (coordinatesOfValidPair) => {
+  const toDataFormat = (labelRect, inputRect) => ([
+    Math.floor(inputRect.left - labelRect.left),
+    Math.floor(inputRect.top - labelRect.top),
+    Math.floor(inputRect.right - labelRect.right),
+    Math.floor(inputRect.bottom - labelRect.bottom),
+  ]);
   const len = coordinatesOfValidPair.length;
-  const result = {};
+  const outputLines = [];
   for (let i=0; i<len; i++) {
-    for (let j=i; j<len; j++) {
-      const a = coordinatesOfValidPair[i][0];
-      const b = coordinatesOfValidPair[j][1];
-      const validPair = (i === j) ? 1 : 0;
-      const key = `${a.selector} ${j}`
-      result[key] = (
-        [
-          [a.left, b.left, a.right, b.right],
-          [a.top, b.top, a.bottom, b.bottom],
-        ].map(toRelative).flat().concat(validPair).join(', ')
+    const [validLabel, validInput] = coordinatesOfValidPair[i];
+    const validPairData = toDataFormat(validLabel, validInput);
+    for (let j=0; j<len; j++) {
+      if (i == j) { continue; }
+      const label = coordinatesOfValidPair[i][0];
+      const input = coordinatesOfValidPair[j][1];
+      const invalidPairData = toDataFormat(label, input);
+      outputLines.push(
+        JSON.stringify([validPairData, invalidPairData])
       );
     }
   }
   console.log('=== original ===');
-  console.log(Object.keys(result).map(key => `- [${result[key]}] # ${key}`).join('\n'));
+  console.log(outputLines.map(line => `- ${line}`).join('\n'));
   console.log('=== clean up ===');
-  const outputKeys = [];
-  const outputRows = [];
-  Object.keys(result).forEach((key) => {
-    if (outputRows.includes(result[key])) return;
-    outputRows.push(result[key]);
-    outputKeys.push(key);
+  const filteredLines = [];
+  outputLines.forEach(line => {
+    if (filteredLines.includes(line)) { return; }
+    filteredLines.push(line);
   });
-  console.log(outputKeys.map(key => `- [${result[key]}] # ${key}`).join('\n'));
+  console.log(filteredLines.map(line => `- ${line}`).join('\n'));
   // this return object is for confirming pair elements
   return coordinatesOfValidPair.map(
     ([label, input]) => [label.element, input.element]
