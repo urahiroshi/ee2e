@@ -1,7 +1,33 @@
 <html>
+  <head>
+    <style>
+      main {
+        width: 370px;
+        font-size: 16px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 210px 160px;
+        margin-bottom: 12px;
+      }
+      .grid #command {
+        width: 200px;
+      }
+      .grid #target {
+        width: 150px;
+      }
+    </style>
+  </head>
   <body>
-    <input type="text" id="command" />
-    <button id="executeButton">Execute</button>
+    <main>
+      <div class="grid">
+        <div>Command</div>
+        <div>Target</div>
+        <div><input type="text" id="command" /></div>
+        <div><input type="text" id="target" /></div>
+      </div>
+      <div><button id="executeButton">Execute</button></div>
+    </main>
     <script src="./popup.js" type="module"></script>
   </body>
 </html>
