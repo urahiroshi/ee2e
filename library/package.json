@@ -1,0 +1,17 @@
+{
+  "name": "library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "example.js",
+  "scripts": {
+    "example": "node example.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.0.0"
+  },
+  "devDependencies": {
+    "@tensorflow/tfjs-node": "^4.0.0"
+  }
+}
