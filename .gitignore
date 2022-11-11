@@ -1,3 +1,4 @@
 .DS_store
 training/saved_model
 node_modules
+.parcel-cache
