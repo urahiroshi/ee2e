@@ -6,10 +6,6 @@ async function getCurrentTab() {
   return tab;
 }
 
-const hello = (command, target) => {
-  alert(`${command} ${target}`);
-};
-
 const executeButton = document.getElementById('executeButton');
 executeButton.addEventListener('click', () => {
   const command = document.getElementById('command').value;

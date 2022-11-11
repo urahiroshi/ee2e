@@ -7,5 +7,9 @@
     "default_popup": "popup.html",
     "default_icon": "icon.png"
   },
-  "permissions": ["scripting", "activeTab", "tabs"]
+  "permissions": ["scripting", "activeTab", "tabs"],
+  "web_accessible_resources": [{
+    "resources": ["/content-script/*"],
+    "matches": ["https://*/*", "http://*/*"]
+  }]
 }
