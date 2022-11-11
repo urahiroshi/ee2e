@@ -1,4 +1,5 @@
 .DS_store
 training/saved_model
 node_modules
-.parcel-cache
+extension/.parcel-cache
+extension/content-script

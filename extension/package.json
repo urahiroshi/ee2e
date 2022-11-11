@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "source": "src-content-script/main.js",
-  "main": "content-script/main.js",
   "module": "content-script/module.js",
   "dependencies": {},
   "devDependencies": {
